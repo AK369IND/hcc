@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Main
+{% endblock %}
+
+{% block main %}
+<h3>Power Consumption</h3>
+<br><br>
+<div class="container">
+    <div class="card-columns">  
+        <div class="card deviceBorder deviceBulb" id="deviceCardFan">
+            <div class="card-body text-center">
+                <p class="card-text deviceCardText">Fan</p>
+                <p class="card-text">{{device_consumption[0]['device_consumption']}} Watt Hours</p>
+            </div>
+        </div>
+        <div class="card deviceBorder deviceRGB" id="deviceCardRGB">
+            <div class="card-body text-center">
+                <p class="card-text deviceCardText">RGB LED</p>
+                <p class="card-text">{{device_consumption[1]['device_consumption']}} Watt Hours</p>
+            </div>
+        </div>
+
+
+        <div class="card deviceBorder deviceBulb" id="deviceCardBulb">
+            <div class="card-body text-center">
+                <p class="card-text deviceCardText">LED Bulb</p>
+                <p class="card-text">{{device_consumption[2]['device_consumption']}} Watt Hours</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Sign Up
+{% endblock %}
+
+{% block main %}
+    
+    <div>
+        <h5>Sign up with Google:</h5><br>
+        <!--Google OAuth-->
+        <div class="g-signin2 btn" data-onsuccess="onSignIn" data-theme="dark"></div>
+        <!-- The Google script will find div with class = g-signin2 -->
+    </div><br>
+
+    <h5>OR</h5><br>
+    <button class="btn" data-toggle="collapse" data-target="#collapseSignUp">Custom Sign Up</button>
+    <div id="collapseSignUp" class="collapse"><br>
+        <form action="/signUp" method="post">
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-control" name="username_or_name" placeholder="Username" type="text" required>
+            </div>
+            <div class="form-group">
+                <input class="form-control" name="hash_or_sub" placeholder="Password" type="password" id = "pass_word"required>
+            </div>
+            <div class="form-group">
+                <input class="form-control" name="confirmation" placeholder="Confirm Password" type="password" id = "confirm_pass_word"required>
+            </div>
+            <div>
+                <input type = "checkbox" onclick="show_password()">&nbspShow Passwords
+            </div>
+            <br>
+            <div class="form-group">
+                <input class="form-control" name="email" placeholder="Email for alerts" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+            </div>
+            <button class="btn btn-primary" type="submit">Sign Up</button>
+        </form>
+    </div>
+
+
+    <script>
+        function show_password() 
+        {
+            var x = document.getElementById("pass_word");
+            var y = document.getElementById("confirm_pass_word");
+            //type is 'password' means "....." and 'text' means its visible
+            // so if on click, type is password, we make both visible text
+            if (x.type === "password" || y.type === "password") 
+            {
+                x.type = "text";
+                y.type = "text";
+            } 
+            else // if on click they are text (when we untick the box) we make them hidden dots 
+            {
+                x.type = "password";
+                y.type = "password";
+            }
+        }
+    </script>
+
+{% endblock %}

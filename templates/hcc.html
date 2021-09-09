@@ -1,0 +1,157 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Main
+{% endblock %}
+
+{% block main %}
+
+    <div class="container">
+        <div class="card-columns">  
+            <div class="card deviceBorder deviceBulb" id="deviceCardFan">
+                <div class="card-body text-center">
+                    <p class="card-text deviceCardText">Fan</p>
+                    <button class=" btn light0 card-text " id="111">ON</button>
+                    <br><br>
+                    <button class="btn light0 card-text " id="110">OFF</button>
+                </div>
+            </div>
+            <div class="card deviceBorder deviceRGB" id="deviceCardRGB">
+                <div class="card-body text-center">
+                    <p class="card-text deviceCardText">RGB LED</p>
+                    <form onsubmit="rgbFunc()" id="rgbForm">
+                        <input type="color" id="rgbColor" name="rgbColor" value="#000000"><br><br>
+                        <input type="submit">
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="card deviceBorder deviceBulb" id="deviceCardBulb">
+                <div class="card-body text-center">
+                    <p class="card-text deviceCardText">LED Bulb</p>
+                    <button class=" btn light2 card-text " id="101">ON</button>
+                    <br><br>
+                    <button class="btn light2 card-text " id="100">OFF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        var state = 0; // stores On or OFF state and sends to backend
+        // if any button from the ".light0" class is clicked
+        $(".light0").click(function () {  
+            // get that button's id and store it inside the "p" variable.      
+            var p = $(this).attr('id');
+            
+            if(p === "111")
+            {
+                $("#deviceCardFan").css('background-color', 'rgb(5, 201, 207)');
+                state = 1;
+            }
+            else if(p === "110")
+            {
+                $("#deviceCardFan").css('background-color', 'rgb(58, 88, 87)');
+                state = 0;
+            }        
+            // then send a GET request to the web server 
+            // with some data in a form of dictionary {pin: p} which is the butoon id.                      
+            $.get("http://192.168.1.3:80/", {        
+                device: 0,
+                pin: p      
+            }); 
+            // post request for device consumption data   
+            $.post("http://127.0.0.1:5000/devicesData", {        
+                device: 0,
+                device_state : state
+            }); 
+        });   
+        
+        $(".light2").click(function () {  
+            // get that button's id and store it inside the "p" variable.      
+            var p = $(this).attr('id');
+            if(p === "101")
+            {
+                $("#deviceCardBulb").css('background-color', 'rgb(5, 201, 207)');
+                state = 1;
+            }
+            else if(p === "100")
+            {
+                $("#deviceCardBulb").css('background-color', 'rgb(58, 88, 87)');
+                state = 0;
+            }        
+            // then send a GET request to the web server 
+            // with some data in a form of dictionary {pin: p} which is the butoon id.                      
+            $.get("http://192.168.1.3:80/", {        
+                device: 2,
+                pin: p      
+            });     
+            // post request for device consumption data   
+            $.post("http://127.0.0.1:5000/devicesData", {        
+                device: 2,
+                device_state : state
+            }); 
+        });    
+
+        // prevent color pallet form from reloading the page
+        $("#rgbForm").submit(function(e) {
+            e.preventDefault();
+        });
+
+        // convert hex values of colors to rgb values
+        function hexToRgb(hex) {
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function rgbFunc(){
+            var p = $("#rgbColor").val();  
+            $("#deviceCardRGB").css('background-color', p);
+
+            var r = hexToRgb(p).r;
+            if (r < 10) {r = "00" + r};
+            if (r < 100 && r > 9) {r = "0" + r};
+
+            var g = hexToRgb(p).g;
+            if (g < 10) {g = "00" + g};
+            if (g < 100 && g > 9) {g = "0" + g};
+
+            var b = hexToRgb(p).b;
+            if (b < 10) {b = "00" + b};
+            if (b < 100 && b > 9) {b = "0" + b};
+            console.log(r + g + b);
+
+            if(r + g + b == 0)
+            {
+                state = 0;
+            }
+            else
+            {
+                state = 1;
+            }
+            // then send a GET request to the web server 
+            // with some data in a form of dictionary which are the r g b values.                      
+            $.get("http://192.168.1.3:80/", { 
+                device: 1,       
+                red: r,
+                green: g,
+                blue: b
+            }); 
+            // post request for device consumption data   
+            $.post("http://127.0.0.1:5000/devicesData", {        
+                device: 1,
+                device_state : state
+            });
+        }
+
+       
+        
+    </script>      
+
+{% endblock %}

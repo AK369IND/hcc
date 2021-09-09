@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    About
+{% endblock %}
+
+{% block main %}
+
+
+    {% if not session.user_id %}
+        <div class="parallax"></div>
+        <div class="parallaxText">Making a home smart, <br> with the Internet of Things (IoT)<br></div>
+        <div class="parallaxSubText">Control appliances and monitor their usage.</div>
+        <div class="parallax"></div>
+    {% endif %}
+
+{% endblock %}
